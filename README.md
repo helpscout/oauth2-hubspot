@@ -2,7 +2,7 @@
 
 [![Latest Version](https://img.shields.io/github/release/helpscout/oauth2-hubspot.svg?style=flat-square)](https://github.com/helpscout/oauth2-hubspot/releases)
 [![Software license](https://img.shields.io/badge/license-MIT-blue.svg?style=flat-square)](https://raw.githubusercontent.com/helpscout/oauth2-hubspot/develop/LICENSE)
-[![Build Status](https://travis-ci.org/helpscout/oauth2-hubspot.svg?branch=master?style=flat-square)](https://travis-ci.org/helpscout/oauth2-hubspot)
+[![Build Status](https://travis-ci.org/helpscout/oauth2-hubspot.svg?branch=master&style=flat-square)](https://travis-ci.org/helpscout/oauth2-hubspot)
 
 This package provides a HubSpot OAuth 2.0 support for the PHP League's [OAuth 2.0 Client](https://github.com/thephpleague/oauth2-client).
 
