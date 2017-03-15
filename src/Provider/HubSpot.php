@@ -1,10 +1,8 @@
 <?php
 namespace HelpScout\OAuth2\Client\Provider;
 
-use League\OAuth2\Client\Grant\AbstractGrant;
 use League\OAuth2\Client\Provider\AbstractProvider;
 use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
-use League\OAuth2\Client\Provider\ResourceOwnerInterface;
 use League\OAuth2\Client\Token\AccessToken;
 use Psr\Http\Message\ResponseInterface;
 
@@ -26,6 +24,7 @@ class HubSpot extends AbstractProvider
      * Get access token url to retrieve token
      *
      * @param array $params
+     *
      * @return string
      */
     public function getBaseAccessTokenUrl(array $params)
@@ -92,5 +91,4 @@ class HubSpot extends AbstractProvider
     {
         return new HubSpotResourceOwner($response);
     }
-
 }
