@@ -1,6 +1,7 @@
 {
     "name": "helpscout/oauth2-hubspot",
     "description": "HubSpot OAuth 2 Client Provider for The PHP League OAuth2-Client package",
+    "license": "MIT",
     "authors": [
         {
             "name": "Platform Group",
