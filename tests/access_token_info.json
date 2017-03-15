@@ -1,0 +1,15 @@
+{
+  "token": "mock_token",
+  "user": "mock_email",
+  "hub_domain": "mock_domain",
+  "scopes": [
+    "contacts",
+    "timeline",
+    "oauth"
+  ],
+  "hub_id": 56789,
+  "app_id": 1234567,
+  "expires_in": 21288,
+  "user_id": 987654,
+  "token_type": "access"
+}
