@@ -93,7 +93,7 @@ class HubSpotTest extends \PHPUnit_Framework_TestCase
         $uri = parse_url($url);
 
         $this->assertEquals('api.hubapi.com', $uri['host']);
-        $this->assertEquals('/oauth/v1/access-token/' . $token, $uri['path']);
+        $this->assertEquals('/oauth/v1/access-tokens/' . $token, $uri['path']);
     }
 
     public function testGetAccessToken()

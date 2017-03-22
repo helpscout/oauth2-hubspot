@@ -34,7 +34,7 @@ class HubSpot extends AbstractProvider
 
     public function getResourceOwnerDetailsUrl(AccessToken $token)
     {
-        return $this->baseApiUrl . '/access-token/' . $token->getToken();
+        return $this->baseApiUrl . '/access-tokens/' . $token->getToken();
     }
 
     /**
