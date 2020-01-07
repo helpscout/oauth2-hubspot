@@ -4,9 +4,10 @@ namespace HelpScout\OAuth2\Client\Test;
 use GuzzleHttp\ClientInterface;
 use HelpScout\OAuth2\Client\Provider\HubSpot;
 use League\OAuth2\Client\Token\AccessToken;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
-class HubSpotTest extends \PHPUnit_Framework_TestCase
+class HubSpotTest extends TestCase
 {
     /**
      * @var HubSpot
