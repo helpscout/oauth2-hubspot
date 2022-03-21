@@ -4,9 +4,10 @@ namespace HelpScout\OAuth2\Client\Test;
 use GuzzleHttp\ClientInterface;
 use HelpScout\OAuth2\Client\Provider\HubSpot;
 use League\OAuth2\Client\Token\AccessToken;
+use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
 
-class HubSpotTest extends \PHPUnit_Framework_TestCase
+class HubSpotTest extends TestCase
 {
     /**
      * @var HubSpot
@@ -57,7 +58,7 @@ class HubSpotTest extends \PHPUnit_Framework_TestCase
 
         $url = $this->provider->getAuthorizationUrl($options);
 
-        $this->assertContains(urlencode(implode(' ', $options['scope'])), $url);
+        $this->assertContains(implode('%20', $options['scope']), $url);
     }
 
     public function testGetAuthorizationUrl()
