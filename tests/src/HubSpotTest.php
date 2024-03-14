@@ -2,7 +2,9 @@
 namespace HelpScout\OAuth2\Client\Test;
 
 use GuzzleHttp\ClientInterface;
+use GuzzleHttp\Psr7\Response;
 use HelpScout\OAuth2\Client\Provider\HubSpot;
+use League\OAuth2\Client\Provider\Exception\IdentityProviderException;
 use League\OAuth2\Client\Token\AccessToken;
 use PHPUnit\Framework\TestCase;
 use Psr\Http\Message\ResponseInterface;
@@ -14,7 +16,7 @@ class HubSpotTest extends TestCase
      */
     protected $provider;
 
-    protected function setUp()
+    protected function setUp(): void
     {
         $this->provider = new HubSpot([
             'clientId' => 'mock_client_id',
@@ -58,7 +60,7 @@ class HubSpotTest extends TestCase
 
         $url = $this->provider->getAuthorizationUrl($options);
 
-        $this->assertContains(implode('%20', $options['scope']), $url);
+        $this->assertStringContainsString(implode('%20', $options['scope']), $url);
     }
 
     public function testGetAuthorizationUrl()
@@ -100,13 +102,10 @@ class HubSpotTest extends TestCase
     public function testGetAccessToken()
     {
         $accessToken = $this->getJsonFile('access_token_response.json');
-        $responseMock = $this->getMockBuilder(ResponseInterface::class)->getMock();
-        $responseMock->method('getBody')->willReturn($accessToken);
-        $responseMock->method('getHeader')->willReturn(['content-type' => 'json']);
-        $responseMock->method('getStatusCode')->willReturn(200);
+        $response = new Response(200, ['content-type' => 'json'], $accessToken);
 
         $clientMock = $this->getMockBuilder(ClientInterface::class)->getMock();
-        $clientMock->expects($this->once())->method('send')->willReturn($responseMock);
+        $clientMock->expects($this->once())->method('send')->willReturn($response);
         $this->provider->setHttpClient($clientMock);
 
         $token = $this->provider->getAccessToken('authorization_code', ['code' => 'mock_authorization_code']);
@@ -123,20 +122,13 @@ class HubSpotTest extends TestCase
         $accessTokenInfoJson = $this->getJsonFile('access_token_info.json');
         $accessTokenInfo = json_decode($accessTokenInfoJson, true);
 
-        $postResponseMock = $this->getMockBuilder(ResponseInterface::class)->getMock();
-        $postResponseMock->method('getBody')->willReturn($accessToken);
-        $postResponseMock->method('getHeader')->willReturn(['content-type' => 'json']);
-        $postResponseMock->method('getStatusCode')->willReturn(200);
-
-        $accessTokenInfoResponseMock = $this->getMockBuilder(ResponseInterface::class)->getMock();
-        $accessTokenInfoResponseMock->method('getBody')->willReturn($accessTokenInfoJson);
-        $accessTokenInfoResponseMock->method('getHeader')->willReturn(['content-type' => 'json']);
-        $accessTokenInfoResponseMock->method('getStatusCode')->willReturn(200);
+        $postResponse = new Response(200, ['content-type' => 'json'], $accessToken);
+        $accessTokenInfoResponse = new Response(200, ['content-type' => 'json'], $accessTokenInfoJson);
 
         $clientMock = $this->getMockBuilder(ClientInterface::class)->getMock();
         $clientMock->expects($this->exactly(2))
             ->method('send')
-            ->willReturnOnConsecutiveCalls($postResponseMock, $accessTokenInfoResponseMock);
+            ->willReturnOnConsecutiveCalls($postResponse, $accessTokenInfoResponse);
 
         $this->provider->setHttpClient($clientMock);
 
@@ -149,19 +141,15 @@ class HubSpotTest extends TestCase
         $this->assertEquals($accessTokenInfo['hub_domain'], $user->getHubSpotDomain());
     }
 
-    /**
-     * @expectedException \League\OAuth2\Client\Provider\Exception\IdentityProviderException
-     */
     public function testExceptionThrownWhenErrorReceived()
     {
+        $this->expectException(IdentityProviderException::class);
+
         $status = rand(401,599);
-        $postResponseMock = $this->getMockBuilder(ResponseInterface::class)->getMock();
-        $postResponseMock->method('getBody')->willReturn('{"error": "error_code","error_description": "A human readable error message"}');
-        $postResponseMock->method('getHeader')->willReturn(['content-type' => 'json']);
-        $postResponseMock->method('getStatusCode')->willReturn($status);
+        $postResponse = new Response($status, ['content-type' => 'json'], '{"error": "error_code","error_description": "A human readable error message"}');
 
         $clientMock = $this->getMockBuilder(ClientInterface::class)->getMock();
-        $clientMock->expects($this->once())->method('send')->willReturn($postResponseMock);
+        $clientMock->expects($this->once())->method('send')->willReturn($postResponse);
 
         $this->provider->setHttpClient($clientMock);
 
